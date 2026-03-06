@@ -8,21 +8,20 @@ class Person:
 
 
 def create_person_list(people: list[dict]) -> list[Person]:
-    person_list = []
+    person_list = [
+        Person(person_data["name"], person_data["age"])
+        for person_data in people
+    ]
 
-    # Primeiro cria todas as pessoas
-    for person_data in people:
-        person = Person(person_data["name"], person_data["age"])
-        person_list.append(person)
-
-    # Depois conecta husband/wife
     for person_data in people:
         person = Person.people[person_data["name"]]
+        wife = person_data.get("wife")
+        husband = person_data.get("husband")
 
-        if "wife" in person_data and person_data["wife"] is not None:
-            person.wife = Person.people[person_data["wife"]]
+        if wife is not None:
+            person.wife = Person.people[wife]
 
-        if "husband" in person_data and person_data["husband"] is not None:
-            person.husband = Person.people[person_data["husband"]]
+        if husband is not None:
+            person.husband = Person.people[husband]
 
     return person_list
